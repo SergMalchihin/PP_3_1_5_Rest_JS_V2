@@ -1,7 +1,5 @@
 package ru.kata.spring.boot_security.demo.Models;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -19,16 +17,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 2, max = 20, message = "Имя должно быть от 2 до 20 символов длинной")
+//    @NotEmpty(message = "Имя не должно быть пустым")
+//    @Size(min = 2, max = 20, message = "Имя должно быть от 2 до 20 символов длинной")
     @Column(name = "username" , unique = true)
     private String username;
 
-    @NotEmpty(message = "Почта не должна быть пустой")
+//    @NotEmpty(message = "Почта не должна быть пустой")
     @Column(name = "email")
     private String email;
 
-    @NotEmpty(message = "Почта не должна быть пустой")
+//    @NotEmpty(message = "Почта не должна быть пустой")
     @Column(name = "password")
     private String password;
 

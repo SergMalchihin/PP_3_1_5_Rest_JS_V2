@@ -53,10 +53,10 @@ public class UserServiceImp implements UserService {
 
    @Override
    @Transactional
-   public void updateUser(User user) {
-      if (!user.getPassword().equals(showUser(user.getId()).getPassword())) {
-         user.setPassword(passwordEncoder.encode(user.getPassword()));
-      }
+   public void updateUser(long id, User user) {
+//      if (!user.getPassword().equals(showUser(user.getId()).getPassword())) {
+//         user.setPassword(passwordEncoder.encode(user.getPassword()));
+//      }
       userRepository.save(user);
    }
 
