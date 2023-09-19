@@ -4,6 +4,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,16 +19,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotEmpty(message = "Имя не должно быть пустым")
-//    @Size(min = 2, max = 20, message = "Имя должно быть от 2 до 20 символов длинной")
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 50 символов длинной")
     @Column(name = "username" , unique = true)
     private String username;
-
-//    @NotEmpty(message = "Почта не должна быть пустой")
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(name = "age")
+    private Integer age;
+    @NotEmpty(message = "Почта не должна быть пустой")
     @Column(name = "email")
     private String email;
 
-//    @NotEmpty(message = "Почта не должна быть пустой")
+    @NotEmpty(message = "Пароль не должен быть пустой")
     @Column(name = "password")
     private String password;
 
@@ -35,11 +40,15 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
+
+
     public User() {
     }
 
-    public User(String username,  String email, String password, List<Role> roles) {
+    public User(String username, String lastName, Integer age, String email, String password, List<Role> roles) {
         this.username = username;
+        this.lastName = lastName;
+        this.age = age;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -80,6 +89,22 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -116,6 +141,5 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
-
 
 }

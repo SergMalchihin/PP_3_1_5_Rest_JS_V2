@@ -1,10 +1,12 @@
 package ru.kata.spring.boot_security.demo.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.Models.Role;
 import ru.kata.spring.boot_security.demo.Models.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
@@ -24,8 +26,12 @@ public class AdminController {
     }
 
     @GetMapping("/")
-    public String showAllUsers(Model model) {
-        model.addAttribute("allUsers", userService.getAllUsers());
+    public String showAllUsers(@AuthenticationPrincipal User user, Role role, Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("user", user);
+        model.addAttribute("new_user", new User());
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("role", role);
         return "admin";
     }
 
