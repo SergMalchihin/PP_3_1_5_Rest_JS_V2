@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.kata.spring.boot_security.demo.Models.Role;
 import ru.kata.spring.boot_security.demo.Models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
@@ -54,9 +55,12 @@ public class UserServiceImp implements UserService {
    @Override
    @Transactional
    public void updateUser(long id, User user) {
-//      if (!user.getPassword().equals(showUser(user.getId()).getPassword())) {
-//         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//      }
+      User user_from_DB = userRepository.findById(id).get(); //user_from_DB из БД, кого хотим редактировать
+      user_from_DB.setUsername(user.getUsername());
+      user_from_DB.setRoles((List<Role>) user.getAuthorities());
+      if (!user.getPassword().equals(showUser(user.getId()).getPassword())) {
+         user.setPassword(passwordEncoder.encode(user.getPassword()));
+      }
       userRepository.save(user);
    }
 
