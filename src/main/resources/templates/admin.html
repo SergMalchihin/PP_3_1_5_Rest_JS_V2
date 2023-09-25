@@ -336,8 +336,9 @@
                     <label for="roles">Roles</label>
                     <select multiple class="form-control" name="authorities" id="roles" required>
                       <option th:each="role : ${roles}"
+                              th:text="${role.toString()}"
                               th:value="${role.id}"
-                              th:text="${role.toString()}">
+                              th:checked="${user.roles.contains(role)}">
                       </option>
                     </select>
                     <div class="invalid-feedback">

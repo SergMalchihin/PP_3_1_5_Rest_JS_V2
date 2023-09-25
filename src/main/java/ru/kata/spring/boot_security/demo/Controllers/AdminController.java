@@ -12,6 +12,7 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -51,12 +52,14 @@ public class AdminController {
     public String create(@ModelAttribute("user") User user) {
         System.out.println("Добавление");
         userService.saveUser(user);
+
         return "redirect:/admin/";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/edit/{id}")
     public String editUser(Model model, @PathVariable("id") long id) {
         model.addAttribute("user", userService.showUser(id));
+        model.addAttribute("roles", roleService.getAllRoles());
         return "/edit";
     }
 
