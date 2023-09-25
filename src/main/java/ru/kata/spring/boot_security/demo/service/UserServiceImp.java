@@ -18,12 +18,14 @@ import java.util.Optional;
 @Service
 public class UserServiceImp implements UserService {
 
+   private final RoleRepository roleRepository;
 
    private final UserRepository userRepository;
    private final PasswordEncoder passwordEncoder;
 
    @Autowired
-   public UserServiceImp(UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+   public UserServiceImp(RoleRepository roleRepository, UserRepository userRepository, @Lazy PasswordEncoder passwordEncoder) {
+      this.roleRepository = roleRepository;
       this.userRepository = userRepository;
       this.passwordEncoder = passwordEncoder;
    }
@@ -59,7 +61,14 @@ public class UserServiceImp implements UserService {
       userFrom_DB.setLastName(user.getLastName());
       userFrom_DB.setAge(user.getAge());
       userFrom_DB.setEmail(user.getEmail());
-      userFrom_DB.setRoles(user.getRoles());
+      System.out.println("ROLE USERA = " + user.getRoles());
+      System.out.println("ROLE_From_BD USERA = " + userFrom_DB.getRoles());
+      System.out.println("showUser(user.getId() = " + showUser(user.getId()).getRoles());
+
+      if (user.getRoles() == null) {
+         user.setRoles(userFrom_DB.getRoles());
+      }
+
 
       if (!user.getPassword().equals(showUser(user.getId()).getPassword())) {
          user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -77,7 +86,7 @@ public class UserServiceImp implements UserService {
    @Transactional
    @Override
    public void saveUser(User user) {
-      user.setRoles(user.getRoles());
+      user.setRoles(roleRepository.findAll());
       user.setPassword(passwordEncoder.encode(user.getPassword()));
       userRepository.save(user);
    }
