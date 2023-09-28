@@ -61,18 +61,15 @@ public class UserServiceImp implements UserService {
       userFrom_DB.setLastName(user.getLastName());
       userFrom_DB.setAge(user.getAge());
       userFrom_DB.setEmail(user.getEmail());
-      System.out.println("ROLE USERA = " + user.getRoles());
-      System.out.println("ROLE_From_BD USERA = " + userFrom_DB.getRoles());
-      System.out.println("showUser(user.getId() = " + showUser(user.getId()).getRoles());
 
       if (user.getRoles() == null) {
          user.setRoles(userFrom_DB.getRoles());
       }
 
-
       if (!user.getPassword().equals(showUser(user.getId()).getPassword())) {
          user.setPassword(passwordEncoder.encode(user.getPassword()));
       }
+
       userRepository.save(user);
    }
 
@@ -86,7 +83,6 @@ public class UserServiceImp implements UserService {
    @Transactional
    @Override
    public void saveUser(User user) {
-      user.setRoles(roleRepository.findAll());
       user.setPassword(passwordEncoder.encode(user.getPassword()));
       userRepository.save(user);
    }
