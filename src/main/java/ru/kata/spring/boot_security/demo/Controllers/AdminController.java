@@ -1,10 +1,8 @@
 package ru.kata.spring.boot_security.demo.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.Models.Role;
 import ru.kata.spring.boot_security.demo.Models.User;
@@ -12,9 +10,10 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
+import java.util.List;
 
-@Controller
-@RequestMapping("/admin")
+@RestController
+@RequestMapping("/api/admin")
 public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
@@ -26,55 +25,36 @@ public class AdminController {
     }
 
     @GetMapping("/")
-    public String showAllUsers(@AuthenticationPrincipal User user, Role role, Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("user", user);
-        model.addAttribute("new_user", new User());
-        model.addAttribute("roles", roleService.getAllRoles());
-        model.addAttribute("role", role);
-        return "admin";
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
-    @GetMapping("/showUser")
-    public String showUser(Model model, Principal principal) {
-        model.addAttribute("user", userService.findByUsername(principal.getName()));
-        return "showUser";
-    }
-    @GetMapping("/new")
-    public String newUser(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "/new";
+    @GetMapping("/getUser")
+    public ResponseEntity<User> getCurrentUser(Principal principal) {
+        return new ResponseEntity<>(userService.findByUsername(principal.getName()), HttpStatus.OK);
     }
 
-    @PostMapping("/new")
-    public String create(@ModelAttribute("user") User user) {
-        System.out.println("Добавление");
+
+    @PostMapping("/")
+    public ResponseEntity<HttpStatus> createUser(@RequestBody User user) {
         userService.saveUser(user);
-
-        return "redirect:/admin/";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/edit/{id}")
-    public String editUser(Model model, @PathVariable("id") long id) {
-        model.addAttribute("user", userService.showUser(id));
-        model.addAttribute("roles", roleService.getAllRoles());
-        return "/edit";
+    @GetMapping("/roles")
+    public ResponseEntity<List<Role>> getRoles() {
+        return new ResponseEntity<>(roleService.getAllRoles(), HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("user") User user,
-                         BindingResult bindingResult, @PathVariable ("id") long id) {
-        if (bindingResult.hasErrors())
-            return "/edit";
-
-        userService.updateUser(id, user);
-        return "redirect:/admin/";
+    @PatchMapping("/")
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
         userService.deleteUserById(id);
-        return "redirect:/admin/";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

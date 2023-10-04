@@ -19,19 +19,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @NotEmpty(message = "Имя не должно быть пустым")
-//    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 50 символов длинной")
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 50 символов длинной")
     @Column(name = "username" , unique = true)
     private String username;
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "age")
     private Integer age;
-//    @NotEmpty(message = "Почта не должна быть пустой")
+    @NotEmpty(message = "Почта не должна быть пустой")
     @Column(name = "email")
     private String email;
 
-//    @NotEmpty(message = "Пароль не должен быть пустой")
+    @NotEmpty(message = "Пароль не должен быть пустой")
     @Column(name = "password")
     private String password;
 
@@ -45,7 +45,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String lastName, Integer age, String email, String password, List<Role> roles) {
+    public User(String username, String lastName,Integer age,  String email, String password, List<Role> roles) {
         this.username = username;
         this.lastName = lastName;
         this.age = age;
