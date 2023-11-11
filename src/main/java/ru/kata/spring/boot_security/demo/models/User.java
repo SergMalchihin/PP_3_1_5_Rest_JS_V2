@@ -27,7 +27,7 @@ public class User implements UserDetails {
     @Column(name = "lastname")
     private String lastname;
 
-    @Min(14)
+
     @Column(name = "age")
     private Byte age;
 

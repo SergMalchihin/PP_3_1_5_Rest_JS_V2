@@ -65,7 +65,7 @@ public class RestAdminController {
 
     @PatchMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@RequestBody User userFromWebPage, @PathVariable("id") Long id) {
-        userService.update(userFromWebPage);
+        userService.saveUser(userFromWebPage);
         return new ResponseEntity<>(userFromWebPage, HttpStatus.OK);
     }
 
